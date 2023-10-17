@@ -2,15 +2,15 @@ Nest is a powerful web framework for Node.js, which helps you effortlessly build
 
 It is not just another framework. You do not have to wait for a large community, because Nest is built with awesome, popular well-known libraries – Express and socket.io! It means, that you can quickly start using framework without worrying about a third party plugins.
 
-Core Concept
+**Core Concept**
 The core concept of Nest is to provide an architecture, which helps developers to accomplish maximum separation of layers and increase abstraction in their applications.
 
-Setup Application
+**Setup Application**
 Nest is built with features from both ES6 and ES7 (decorators, async / await). It means, that the easiest way to start adventure with it is to use Babel or TypeScript.
 
 In this article I will use TypeScript (it is not required!) and I recommend everyone to choose this way too.
 
-Sample tsconfig.json file:
+**Sample tsconfig.json file:**
 
 {
 "compilerOptions": {
@@ -43,12 +43,10 @@ import { ApplicationModule } from './app.module';
 const app = NestFactory.create(ApplicationModule);
 app.listen(3000, () => console.log('Application is listening on port 3000'));
 
-#==========
-
-Express instance
+**Express instance**
 If you want to have a full control of express instance lifecycle, you can simply pass already created object as a second argument of NestFactory.create() method,
 
-just like this:
+**just like this:**
 
 import express from 'express';
 import { NestFactory } from 'nest.js';
@@ -60,10 +58,9 @@ app.listen(3000, () => console.log('Application is listening on port 3000'));
 
 It means, that you can directly add some custom configuration (e.g. setup some plugins such as morgan or body-parser).
 
-First Controller
+**First Controller**
 The Controllers layer is responsible for handling incoming HTTP requests. In Nest, Controller is a simple class with @Controller() decorator.
 
-Controllers_1
 In previuos section we set up entry point for an application. Now, let’s build our first endpoint /users:
 
 import { Controller, Get, Post } from 'nest.js';
@@ -118,7 +115,7 @@ export class ApplicationModule {}
 
 As you can see – we only have to insert our controller into controllers array. It’s everything.
 
-Components
+**Components**
 
 Almost everything is a component – Service, Repository, Provider etc. and they might be injected to controllers or to another component by constructor.
 
@@ -158,7 +155,7 @@ export class UsersService {
 
 }
 
-Nest Component is a simple class, with @Component() annotation.
+**Nest Component is a simple class, with @Component() annotation.**
 
 As might be seen in getUser() method we used HttpException. It is a Nest built-in Exception, which takes two parameters – error message and status code. It is a good practice to create domain exceptions, which should extend HttpException (more about it in „Error Handling” section).
 
@@ -262,7 +259,7 @@ instance.use(bodyParser.json());
 const app = NestFactory.create(ApplicationModule, instance);
 app.listen(3000, () => console.log('Application is listening on port 3000'));
 
-Async / await
+**Async / await**
 
 Nest is compatible with async / await feature from ES7, so we can quickly rewrite our UsersController:
 
@@ -292,7 +289,7 @@ constructor(private usersService: UsersService) {}
 
 Looks better right? There you can read more about async / await.
 
-Modules
+**Modules**
 
 Module is a class with @Module({}) decorator. This decorator provides metadata, which framework uses to organize application structure.
 
@@ -338,7 +335,7 @@ It’s everything.
 
 As might be seen, with Nest you can naturally split your code into separated and reusable modules!
 
-Middlewares
+**Middlewares**
 
 Middleware is a function, which is called before route handler. Middleware functions have access to request and response objects, so they can modify them. They can also be something like a barrier – if middleware function does not call next(), the request will never be handled by route handler.
 
@@ -367,7 +364,7 @@ constructor(private usersService: UsersService) {}
 
 }
 
-Some facts about middlewares:
+**Some facts about middlewares:**
 
 you should use @Middleware() annotation to tell Nest, that this class is a middleware,
 
@@ -412,7 +409,7 @@ But it is also possible to directly define for which path middleware should be u
 builder.apply(AuthMiddleware)
 .forRoutes({ path: '\*', method: RequestMethod.ALL });
 
-Chaining
+**Chaining**
 
 MiddlewareBuilder is a builder in fact. It means, that you can simply chain apply() calls:
 
@@ -421,14 +418,14 @@ builder.apply(AuthMiddleware, PassportMidleware)
 .apply(...)
 .forRoutes(...);
 
-Ordering
+**Ordering**
 
 Middlewares are called in the same order as they are placed in array. Middlewares configured in sub-module are called after the parent module configuration.
 
 Real-time applications with Gateways
 There are special components in Nest called Gateways. Gateways help us to create real-time web apps. They are some kind of encapsulated socket.io features adjusted to framework architecture.
 
-Gateways
+**Gateways**
 
 Gateway is a Component, so it can inject dependencies through constructor. Gateway also can be injected into another component.
 
@@ -454,13 +451,13 @@ exports: [ UsersService ],
 
 By the way, there are three useful events of
 
-Gateway:
+**Gateway:**
 
 afterInit, which gets as an argument native server socket.io object,
 
 handleConnection and handleDisconnect, which gets as an argument native client socket.io object.
 
-What with messages?
+**What with messages?**
 
 In Gateway, we can simply subscribe to emitted messages:
 
@@ -506,7 +503,7 @@ export class UsersGateway implements NestGateway {
 
 Value will be assigned after server initialization.
 
-Reactive Streams
+**Reactive Streams**
 
 As you already know, Nest Gateway is a simple component, which can be injected into another components. This feature gives us possibility to choose how we are going to react on messages.
 
@@ -514,7 +511,7 @@ Of course – we can just inject components to Gateway and call their appropriat
 
 But there is another solution – Gateway Reactive Streams. You can read more about them here.
 
-Microservices Support
+**Microservices Support**
 
 It is unbelievably simple to transform Nest application into Nest microservice.
 
@@ -529,11 +526,11 @@ app.listen() => console.log('Microservice is listening on port 3000'));
 
 It’s everything!
 
-Communication via TCP
+**Communication via TCP**
 
 Microservices by default Nest microservice is listening for messages via TCP protocol. It means that right now @RequestMapping() (and @Post(), @Get() etc. too) will not be useful, because it is mapping HTTP requests. So, how microservice will recognize messages? Just by patterns.
 
-What is pattern?
+**What is pattern?**
 
 It is nothing special. It could be an object, string or even number (but it is not a good idea).
 
@@ -623,7 +620,7 @@ Now, when someone will make /test request (GET), that’s how response should lo
 "result": 15
 }
 
-Redis
+**Redis**
 
 There is another way to work with Nest microservices. Instead of direct TCP communication, we could use amazing Redis feature – publish / subscribe. Of course before you can use it, it is obligatory to install Redis.
 
@@ -643,7 +640,7 @@ app.listen(() => console.log('Microservice listen on port:', 5667 ));
 
 And that’s all. Now your microservice will subscribe to messages published via Redis. The rest works same – patterns, error handling, etc.
 
-Redis Client
+**Redis Client**
 
 Now, let’s see how to create client. Previously, your client instance configuration looks like that:
 
@@ -657,12 +654,11 @@ client: ClientProxy;
 
 Easy, right? That’s all. Other functionalities works same as in TCP communication.
 
-Shared Module
+**Shared Module**
+
 Nest Modules can export their components. It means, that we can easily share component instance between them.
 
 The best way to share an instance between two or more modules is to create Shared Module.
-
-Shared_Module
 
 For example – if we want to share ChatGateway component across entire application, we could do it in this way:
 
@@ -680,7 +676,7 @@ export class FeatureModule {}
 
 That’s all.
 
-Dependency Injection
+**Dependency Injection**
 
 Dependency Injection is a strong mechanism, which helps us easily manage dependencies of our classes. It is very popular pattern in strongly typed languages like C# and Java.
 
@@ -688,13 +684,13 @@ In Node.js it is not such important to use those kind of features, because we al
 
 The module loading system is sufficient for small and medium size applications. When amount of code grows, it is harder and harder to smoothly organize dependencies between layers. Someday everything may just blow up.
 
-giphy
+**giphy**
 
 It is also less intuitive than DI by constructor.
 
 This is the reason, why Nest has its own DI system.
 
-Custom components
+**Custom components**
 
 You have already learnt, that it is incredibly easy to add component to chosen module:
 
@@ -704,7 +700,7 @@ components: [ UsersService ]
 })
 But there is some other scenarios, which Nest allows you to take advantages of.
 
-Use value:
+**Use value:**
 
 const customObject = {};
 @Module({
@@ -714,7 +710,7 @@ components: [
 ],
 })
 
-When:
+**When:**
 
 you want to use specific value. Now, in this module Nest will associate customObject with UsersService metatype,
 you want to use test doubles (unit testing).
@@ -731,7 +727,7 @@ components: [
 ],
 })
 
-When:
+**When:**
 
 you want to use chosen, more specific class only in this module.
 Use factory:
@@ -750,7 +746,7 @@ inject: [ ChatService ]
 ],
 })
 
-When:
+**When:**
 
 you want to provide a value, which has to be calculated using other components (or custom packages features),
 you want to provide async value (just return Observable or Promise), e.g. database connection.
@@ -766,7 +762,7 @@ components: [
 ],
 })
 
-When:
+**When:**
 
 you want to provide value with a chosen key.
 Remember:
@@ -785,7 +781,7 @@ console.log(isProductionMode); // false
 }
 }
 
-ModuleRef
+**ModuleRef**
 
 Sometimes you might want to directly get component instance from module reference. It not a big thing with Nest – just inject ModuleRef in your class:
 
@@ -794,6 +790,7 @@ constructor(
 private usersService: UsersService,
 private moduleRef: ModuleRef) {}
 }
+
 ModuleRef provides one method:
 
 get<T>(key), which returns instance for equivalent key (mainly metatype). Example moduleRef.get<UsersService>(UsersService) returns instance of UsersService component from current module.
@@ -811,11 +808,11 @@ moduleRef.getContext() === 'Test' // true
 
 Of course – if you are using TypeScript – you have to cast instance to appropriate type.
 
-Testing
+**Testing**
 
 Nest gives you a set of test utilities, which boost application testing process. There are two different approaches to test your components and controllers – isolated tests or with dedicated Nest test utilities.
 
-Isolated Tests
+**Unit Tests**
 
 Both Nest controllers and components are a simple JavaScript classes. Itmeans, that you could easily create them by yourself:
 
@@ -826,7 +823,7 @@ If your class has any dependency, you could use test doubles, for example from s
 const stub = sinon.createStubInstance(DependencyComponent);
 const instance = new SimpleComponent(stub);
 
-Nest Test Utilities
+**Nest Test Utilities**
 
 The another way to test your applications building block is to use dedicated Nest Test Utilities.
 
@@ -857,7 +854,7 @@ components: [
 
 const usersService = Test.get<UsersService>(UsersService); // mock
 
-Error Handling
+**Error Handling**
 
 Notice: It is mainly for REST applications.
 
@@ -869,7 +866,7 @@ If – somewhere – in your application, you will throw an Exception, which is 
 "message": "Unkown exception"
 }
 
-Exception Hierarchy
+**Exception Hierarchy**
 
 In your application, you should create your own Exceptions Hierarchy. All HTTP exceptions should inherit from built-in HttpException.
 
