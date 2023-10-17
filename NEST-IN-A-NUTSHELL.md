@@ -13,7 +13,9 @@ In this article I will use TypeScript (it is not required!) and I recommend ever
 **Sample tsconfig.json file:**
 
 {
-"compilerOptions": {
+
+"compilerOptions":
+{
 "module": "commonjs",
 "declaration": false,
 "noImplicitAny": false,
@@ -22,7 +24,8 @@ In this article I will use TypeScript (it is not required!) and I recommend ever
 "experimentalDecorators": true,
 "target": "es6"
 },
-"exclude": [
+"exclude":
+[
 "node_modules"
 ]
 }
@@ -33,6 +36,7 @@ import { Module } from 'nest.js';
 
 @Module({})
 export class ApplicationModule {}
+
 At this moment module metadata is empty ({}), because we only want to run application (we do not have any controlles or components right now).
 
 Second step – make file index.ts (or whatever) and use NestFactory to create Nest application instance based on our module class.
@@ -44,6 +48,7 @@ const app = NestFactory.create(ApplicationModule);
 app.listen(3000, () => console.log('Application is listening on port 3000'));
 
 **Express instance**
+
 If you want to have a full control of express instance lifecycle, you can simply pass already created object as a second argument of NestFactory.create() method,
 
 **just like this:**
@@ -59,7 +64,10 @@ app.listen(3000, () => console.log('Application is listening on port 3000'));
 It means, that you can directly add some custom configuration (e.g. setup some plugins such as morgan or body-parser).
 
 **First Controller**
-The Controllers layer is responsible for handling incoming HTTP requests. In Nest, Controller is a simple class with @Controller() decorator.
+
+The Controllers layer is responsible for handling incoming HTTP requests.
+
+In Nest, Controller is a simple class with @Controller() decorator.
 
 In previuos section we set up entry point for an application. Now, let’s build our first endpoint /users:
 
@@ -67,8 +75,9 @@ import { Controller, Get, Post } from 'nest.js';
 
 @Controller()
 export class UsersController {
-@Get('users')
-getAllUsers(req, res, next) {}
+
+    @Get('users')
+    getAllUsers(req, res, next) {}
 
     @Get('users/:id')
     getUser(req, res, next) {}
@@ -77,11 +86,13 @@ getAllUsers(req, res, next) {}
     addUser(req, res, next) {}
 
 }
+
 As you can guess, we created an endpoint with 3 different paths:
 
 GET: users
 GET: users/:id
 POST: users
+
 Look at our class again. Is it necessary to repeat ‚users’ in each path? Fortunately – not.
 
 Nest allows us to pass additional metadata to @Controller() decorator { path } which is a prefix for each route. Let’s rewrite our controller:
